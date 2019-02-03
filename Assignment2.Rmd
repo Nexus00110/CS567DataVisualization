@@ -1,0 +1,76 @@
+---
+title: "Assignment 2"
+author: "rjh123"
+date: "February 2, 2019"
+output: html_document
+---
+
+## Sequence Example
+
+```{r}
+teams <- 1:2
+quart <- 1:4
+wiuNumRange <- 1:42
+
+teams
+
+quart
+
+wiuNumRange
+```
+
+## Vector Example
+
+```{r}
+wiuQuartScores <- c(22, 18, 22, 16)
+unoQuartScores <- c(16, 16, 8, 30)
+gameRefs <- c("Knight", "Brooks", "Maxey")
+
+wiuQuartScores
+unoQuartScores
+gameRefs
+
+as.character(wiuQuartScores)
+```
+
+## Missing Values Example
+
+```{r}
+
+0/0
+
+wiuQuartWin <- c(TRUE, TRUE, TRUE, FALSE, NA)
+unoQuartWin <- c(FALSE, FALSE, FALSE, TRUE, NaN)
+
+is.nan(wiuQuartWin)
+is.nan(unoQuartWin)
+is.na(unoQuartWin)
+```
+
+## Vector Subset Example
+
+```{r}
+wiuPlayNums <- c(1, 4, 10, 13, 14, 21, 22, 24, 30, 32, 33)
+unoPlayNums <- c(1, 2, 5, 11, 13, 21, 25, 33, 35, 42)
+
+testCompare <- complete.cases(wiuQuartWin, unoQuartWin)
+testCompare
+
+wiuPlayNums [wiuPlayNums > 20]
+testGr <- wiuPlayNums == 22
+testGr
+```
+
+## Matrices and Dataframe Example
+
+```{r}
+gameQuartScores <- data.frame(Quarter = c(1:4), Omaha = c(16, 16, 8, 30), Western = c(22, 18, 22, 16))
+gameQuartScores
+nrow(gameQuartScores)
+ncol(gameQuartScores)
+
+wiuNumScores <- c(19, 0, 17, 6, 0, 0, 20, 0, 6, 3, 7)
+playScores <- cbind(wiuPlayNums, wiuNumScores)
+
+playScores[3, ]
+```
