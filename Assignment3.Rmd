@@ -1,0 +1,68 @@
+---
+title: "Assignment3"
+author: "rjh123"
+date: "March 1, 2019"
+output: html_document
+---
+
+```{r}
+## Read datafile
+
+data <- read.csv("C:/Users/Nexus00110/Desktop/University/Graduate/Courses/Topics in Computer Graphics/Week 3/Assignment/primates.csv")
+
+data
+
+
+
+
+```
+
+```{r}
+## Create two vectors
+
+boW <- data[, 2]
+
+boW
+
+brW <- data[, 3]
+
+brW
+```
+
+```{r}
+## For loop find mean
+boWSum <- 0
+boWTot <- 0
+for(i in seq_along(boW)) { 
+  boWSum <- boWSum + boW[i] 
+  boWTot <- boWTot + 1
+  }
+boWMean <- boWSum / boWTot
+boWMean
+```
+
+```{r}
+## Function finds mean
+
+vecMean <- function(v){
+  vSum <<- vSum + v
+  vTot <<- vTot + 1
+}
+
+
+
+```
+
+```{r}
+vSum <<- 0
+vTot <<- 0
+
+lapply(brW, vecMean)
+
+vMean <- vSum / vTot
+
+vMean
+
+```
+vecMean
+```
