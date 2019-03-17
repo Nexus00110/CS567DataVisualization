@@ -1,0 +1,21 @@
+---
+title: "Assignment4"
+author: "rjh123"
+date: "March 16, 2019"
+output: html_document
+---
+
+##
+```{r}
+install.packages("XML")
+library("XML")
+install.packages("httr")
+library("httr")
+
+fileURL <- "https://www.york.ac.uk/teaching/cws/wws/webpage1.html"
+httpReq <- GET(fileURL)
+content <- content(httpReq, as = "text")
+parsedHTML <- htmlParse(content, asText = TRUE)
+
+df <- xmlToDataFrame(parsedHTML)
+```
