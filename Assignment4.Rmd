@@ -12,10 +12,13 @@ library("XML")
 install.packages("httr")
 library("httr")
 
-fileURL <- "https://www.york.ac.uk/teaching/cws/wws/webpage1.html"
+fileURL <- "https://www.sonicsrising.com/pages/history"
 httpReq <- GET(fileURL)
 content <- content(httpReq, as = "text")
 parsedHTML <- htmlParse(content, asText = TRUE)
 
-df <- xmlToDataFrame(parsedHTML)
+DT <- readHTMLTable(parsedHTML)
+DF <- as.data.frame(DT[[1]])
+
+DF
 ```
