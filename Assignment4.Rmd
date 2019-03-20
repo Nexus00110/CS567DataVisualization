@@ -17,8 +17,7 @@ httpReq <- GET(fileURL)
 content <- content(httpReq, as = "text")
 parsedHTML <- htmlParse(content, asText = TRUE)
 
-DT <- readHTMLTable(parsedHTML)
-DF <- as.data.frame(DT[[1]])
+DF <- readHTMLTable(parsedHTML, header = TRUE, colClasses = c("character"), skip.rows = 1, as.data.frame = TRUE, which = c(1))
 
-DF
+head(DF)
 ```
