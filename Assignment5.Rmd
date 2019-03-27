@@ -1,0 +1,42 @@
+---
+title: "Assignment5"
+author: "rjh123"
+date: "March 26, 2019"
+output: html_document
+---
+
+## Change content var name
+```{r}
+install.packages("XML")
+install.packages("httr")
+install.packages("dplyr")
+install.packages("tidyr")
+library("XML")
+library("httr")
+library("dplyr")
+library("tidyr")
+
+requ <- GET("https://en.wikipedia.org/wiki/List_of_Apollo_missions")
+
+cont <- content(requ)
+
+parsedHTML <- htmlParse(cont, asText = TRUE)
+
+DF <- readHTMLTable(parsedHTML, header = TRUE, colClasses = c("character"), as.data.DF2frame = TRUE, which = c(4))
+
+DF <- rename(DF, "Mission" = "Mission\n", "Launch Date" = "Launch date\n")
+
+DF2 <- select(DF, "Mission", "Launch Date")
+
+DF2 <- DF2 %>% separate("Launch Date", into = c("Launch Date", "Remove"), sep = "\\n")
+
+DF2 <- select(DF2, "Mission":"Launch Date")
+
+DF2$`Launch Date` <- as.Date(DF2$`Launch Date`, "%d %b %Y")
+
+DF2 <- mutate(DF2, "Years Since" = difftime(DF2$`Launch Date`, Sys.Date(), units = "days") / 365)
+
+DF2$`Years Since`<- abs(as.integer(DF2$`Years Since`))
+
+head(DF2)
+```
