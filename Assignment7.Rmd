@@ -1,0 +1,83 @@
+---
+title: "Assignment7"
+author: "rjh123"
+date: "April 30, 2019"
+output: html_document
+---
+
+## Install packages
+```{r}
+install.packages("XML")
+
+install.packages("httr")
+
+install.packages("dplyr")
+
+install.packages("tidyr")
+
+install.packages("ggplot2")
+```
+## Load packages
+```{r}
+library("XML")
+
+library("httr")
+
+library("dplyr")
+
+library("tidyr")
+
+library("ggplot2")
+```
+
+## Scraping web for data
+```{r}
+
+requ <- GET("https://en.wikipedia.org/wiki/List_of_Apollo_missions")
+
+cont <- content(requ)
+
+parsedHTML <- htmlParse(cont, asText = TRUE)
+
+DF <- readHTMLTable(parsedHTML, header = TRUE, colClasses = c("character"), as.data.DF2frame = TRUE, which = c(4))
+
+```
+
+## Formatting original data frame
+```{r} 
+DF <- rename(DF, "Mission" = "Mission\n", "LaunchDate" = "Launch date\n")
+
+DF2 <- select(DF, "Mission", "LaunchDate")
+
+DF2 <- DF2 %>% separate("LaunchDate", into = c("LaunchDate", "Remove"), sep = "\\n")
+
+DF2 <- select(DF2, "Mission":"LaunchDate")
+
+DF2$`LaunchDate` <- as.Date(DF2$`LaunchDate`, "%d %b %Y")
+```
+
+## Creating new data drame for ggplot2
+```{r}
+DF2 <- mutate(DF2, LaunchYear = as.POSIXlt(DF2$LaunchDate)$year + 1900)
+cont <- count(DF2, vars = DF2$LaunchYear)
+
+DF3 <- as.data.frame(cont)
+DF3 <- rename(DF3, LaunchYear = vars, Launches = n)
+
+moon <- factor(c("Before","Before", "Before", "Mission Success", "After", "After"))
+moon <- factor(moon, levels = c("Before", "Mission Success", "After"))
+DF3 <- mutate(DF3, Moon = moon)
+```
+
+## Drawing ggplot2
+```{r}
+g <- ggplot(DF3, aes(LaunchYear, Launches))
+p <- g + geom_point()
+
+p <- p + geom_point(aes(color = Moon))
+
+p <- p + labs(title = "Apollo Mission Frequency")
+
+p <- p + geom_smooth(method = "lm")
+print(p)
+```
