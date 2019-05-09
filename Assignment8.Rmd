@@ -1,0 +1,70 @@
+---
+title: "Assignment8"
+author: "rjh123"
+date: "May 3, 2019"
+output: html_document
+---
+
+## Install packages
+```{r}
+install.packages("XML")
+
+install.packages("httr")
+
+install.packages("dplyr")
+
+install.packages("tidyr")
+
+install.packages("ggplot2")
+```
+## Load packages
+```{r}
+library("XML")
+
+library("httr")
+
+library("dplyr")
+
+library("tidyr")
+
+library("ggplot2")
+```
+
+## Scraping web for data
+```{r}
+
+requ <- GET("https://elite-dangerous.fandom.com/wiki/Ships#Base%20Ship")
+
+cont <- content(requ)
+
+parsedHTML <- htmlParse(cont, asText = TRUE)
+
+DF <- readHTMLTable(parsedHTML, header = TRUE, colClasses = c("character"), as.data.frame = TRUE, which = c(2))
+
+```
+
+## Formatting data frame
+```{r} 
+
+DF <- DF[!duplicated(colnames(DF))] 
+DF <- rename(DF, "Model" = " Model\n", "ShipSize" = " Pad Size\n", "TopSpeed(m/s)" = " Speed[Boost](m/s)\n")
+DF <- DF %>% separate("TopSpeed(m/s)", into = c("TopSpeed(m/s)", "Remove"), extra = "merge")
+DF <- DF[-c(39), ]
+DF2 <- select(DF, "ShipSize", "TopSpeed(m/s)")
+DF2 <- droplevels(DF2)
+DF2$ShipSize <- as.numeric(DF2$ShipSize)
+
+```
+
+## Plotting K-means cluster
+```{r}
+
+kMeansObj <- kmeans(DF2, center = 3)
+
+
+plot(DF2, col= kMeansObj$cluster, pch = 19, cex = 2)
+
+
+points(kMeansObj$centers, col = 1:3, pch = 3, cex = 3, lwd= 3)
+
+```
